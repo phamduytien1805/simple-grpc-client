@@ -11,14 +11,28 @@ import {
 } from '@chakra-ui/react';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
 import { Logo } from './Logo';
+import { ChatRoom } from './modules/ChatRoom/containers';
+import { BrowserRouter as Router, Routes, Switch } from 'react-router-dom';
+import { appRoutes } from './routes';
+import PrivateRoute from './common/appRoutes/PrivateRoute';
+import PublicRoute from './common/appRoutes/PublicRoute';
 
 function App() {
+  const privateRoutes = [];
+  const publicRoutes = [];
+  for (const route of appRoutes) {
+    if (route.private) {
+      privateRoutes.push(route);
+    } else {
+      publicRoutes.push(route);
+    }
+  }
   return (
     <ChakraProvider theme={theme}>
-      <Box textAlign="center" fontSize="xl">
-        <Grid minH="100vh" p={3}>
+      <Box fontSize="xl">
+        <Grid minH="100vh" p={3} align="center" justify="center">
           <ColorModeSwitcher justifySelf="flex-end" />
-          <VStack spacing={8}>
+          {/* <VStack spacing={8}>
             <Logo h="40vmin" pointerEvents="none" />
             <Text>
               Edit <Code fontSize="xl">src/App.js</Code> and save to reload.
@@ -32,7 +46,29 @@ function App() {
             >
               Learn Chakra
             </Link>
-          </VStack>
+          </VStack> */}
+          <Router>
+            <Switch>
+              <>
+                {privateRoutes.map(route => (
+                  <PrivateRoute
+                    key={route.key}
+                    path={route.path}
+                    component={route.component}
+                    exact
+                  />
+                ))}
+                {publicRoutes.map(route => (
+                  <PublicRoute
+                    key={route.key}
+                    path={route.path}
+                    component={route.component}
+                    exact
+                  />
+                ))}
+              </>
+            </Switch>
+          </Router>
         </Grid>
       </Box>
     </ChakraProvider>
