@@ -4,7 +4,7 @@ import React from 'react';
 import { format } from 'date-fns';
 const MessageBubble = props => {
   const { currentUser, messageModel, onHandleLike } = props;
-  const { uuid, message, timestamp, username, likes } = messageModel;
+  const { uuid, msg, timestamp, username, like } = messageModel;
   const isMine = 'ses' === username;
 
   return (
@@ -35,14 +35,14 @@ const MessageBubble = props => {
           )}
 
           <Text fontSize="sm" color={'##2C2C2E'} textAlign={'start'}>
-            {message}
+            {msg}
           </Text>
           <Text fontSize="sm" alignSelf="flex-end" color={'#666668'}>
             {format(Number(timestamp), 'HH:mm:ss')}
           </Text>
         </Flex>
         <Flex>
-          {Array.from({ length: likes }).map(() => (
+          {Array.from({ length: like }).map(() => (
             <StarIcon fillOpacity={'20%'} boxSize={3} color={'yellow.700'} />
           ))}
         </Flex>

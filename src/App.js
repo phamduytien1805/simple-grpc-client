@@ -20,8 +20,7 @@ import { Context } from './common/context/Context';
 
 function App() {
   const [user, setUser] = useState(localStorage.getItem('user') || '');
-  console.log('user', user);
-  console.log('localStorage.getItem()', localStorage.getItem('user'));
+
   const privateRoutes = [];
   const publicRoutes = [];
   for (const route of appRoutes) {

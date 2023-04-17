@@ -12,6 +12,9 @@
     "@testing-library/user-event": "^14.1.0",
     "date-fns": "^2.29.3",
     "framer-motion": "^6.2.9",
+    "google-protobuf": "^3.15.8",
+    "grpc-tools": "^1.12.4",
+    "grpc-web": "^1.2.1",
     "perfect-scrollbar": "^1.5.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -26,7 +29,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "proto:gen": "protoc -I=. src/chat.proto --js_out=import_style=commonjs,binary:. --grpc-web_out=import_style=commonjs,mode=grpcwebtext:."
   },
   "eslintConfig": {
     "extends": "react-app"

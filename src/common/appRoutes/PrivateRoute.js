@@ -7,9 +7,7 @@ import { Context } from '../context/Context';
 const PrivateRoute = ({ component, path, exact = true }) => {
   const [user, setUser] = useContext(Context);
 
-  console.log('puser', user);
   if (!user) {
-    console.log('first');
     return <Redirect to={APP_ROUTE.LOGIN} />;
   }
   return <Route path={path} component={component} exact={exact} />;

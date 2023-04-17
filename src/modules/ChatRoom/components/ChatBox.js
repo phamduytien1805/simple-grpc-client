@@ -3,7 +3,7 @@ import { Flex, IconButton, Input, Textarea } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 
 const ChatBox = props => {
-  const { message, onMessaging, onSendMsg } = props;
+  const { message, onMessaging, onSendMsg, error } = props;
 
   const handleKeyDown = e => {
     const { key } = e;
@@ -31,6 +31,7 @@ const ChatBox = props => {
         value={message}
         onChange={onMessaging}
         onKeyDown={handleKeyDown}
+        isInvalid={error}
       />
       <IconButton icon={<ArrowForwardIcon />} onClick={onSendMsg} />
     </Flex>
