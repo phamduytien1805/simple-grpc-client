@@ -1,9 +1,18 @@
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 import { Flex, IconButton, Input, Textarea } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const ChatBox = props => {
   const { message, onMessaging, onSendMsg } = props;
+
+  const handleKeyDown = e => {
+    const { key } = e;
+    if (key === 'Enter' && !e.shiftKey) {
+      onSendMsg && onSendMsg();
+      e.preventDefault();
+    }
+  };
+
   return (
     <Flex
       position={'absolute'}
@@ -21,7 +30,8 @@ const ChatBox = props => {
         placeholder="Here is a sample placeholder"
         value={message}
         onChange={onMessaging}
-      />{' '}
+        onKeyDown={handleKeyDown}
+      />
       <IconButton icon={<ArrowForwardIcon />} onClick={onSendMsg} />
     </Flex>
   );

@@ -32,7 +32,7 @@ export const ChatRoom = () => {
         <Header />
         <PerfectScrollbar
           style={{
-            height: '72%',
+            height: 'calc(100% - 174px)',
             display: 'flex',
             flexDirection: 'column',
           }}
