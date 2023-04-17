@@ -1,11 +1,14 @@
 import { isEmpty } from 'lodash';
 import { Redirect, Route } from 'react-router-dom';
 import { APP_ROUTE } from '../../utils/constants';
+import { useContext, useEffect } from 'react';
+import { Context } from '../context/Context';
 
 const PrivateRoute = ({ component, path, exact = true }) => {
-  const user = localStorage.getItem('user');
-  console.log('user', user);
-  if (isEmpty(user)) {
+  const [user, setUser] = useContext(Context);
+
+  console.log('puser', user);
+  if (!user) {
     console.log('first');
     return <Redirect to={APP_ROUTE.LOGIN} />;
   }

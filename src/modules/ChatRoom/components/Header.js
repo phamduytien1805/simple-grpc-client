@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { Flex, Box, IconButton } from '@chakra-ui/react';
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 import AvatarGroup from './AvatarGroup';
+import { Context } from '../../../common/context/Context';
 
 export const Header = () => {
+  const [user, setUser] = useContext(Context);
+  const handleOutRoom = () => {
+    localStorage.removeItem('user');
+    setUser('');
+  };
   return (
     <Flex
       height={'68px'}
@@ -16,7 +22,7 @@ export const Header = () => {
       <AvatarGroup />
       <Box>Distributed System</Box>
       <Box>
-        <IconButton icon={<ArrowForwardIcon />} onClick={() => {}} />
+        <IconButton icon={<ArrowForwardIcon />} onClick={handleOutRoom} />
       </Box>
     </Flex>
   );

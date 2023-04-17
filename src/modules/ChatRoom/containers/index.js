@@ -7,8 +7,31 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 
 export const ChatRoom = () => {
+  console.log('asdasd');
   const [inputMessage, setInputMessage] = useState('');
-  const [messagesList, setMessagesList] = useState([1, 2, 3, 4, 5, 6, 7, 8]);
+  const [messagesList, setMessagesList] = useState([
+    {
+      uuid: 1,
+      message: 'asd',
+      timestamp: 1681735041626,
+      username: '123',
+      likes: 2,
+    },
+    {
+      uuid: 2,
+      message: 'asd',
+      timestamp: 1681735041626,
+      username: 'ses',
+      likes: 2,
+    },
+    {
+      uuid: 3,
+      message: 'asd',
+      timestamp: 1681735041626,
+      username: '123',
+      likes: 2,
+    },
+  ]);
   const user = localStorage.getItem('user');
 
   const onMessaging = e => {
@@ -17,6 +40,10 @@ export const ChatRoom = () => {
   };
   const onSendMsg = () => {
     console.log('inputMessage', inputMessage);
+  };
+
+  const onHandleLike = uuid => {
+    console.log('uuid', uuid);
   };
   return (
     <Flex justifyContent="center" alignItems="center" h={'90vh'}>
@@ -37,7 +64,11 @@ export const ChatRoom = () => {
             flexDirection: 'column',
           }}
         >
-          <MessagesList messagesList={messagesList} currentUser={user} />
+          <MessagesList
+            messagesList={messagesList}
+            currentUser={user}
+            onHandleLike={onHandleLike}
+          />
         </PerfectScrollbar>
         <ChatBox
           onMessaging={onMessaging}

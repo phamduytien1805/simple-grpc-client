@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ChakraProvider,
   Box,
@@ -16,8 +16,12 @@ import { BrowserRouter as Router, Routes, Switch } from 'react-router-dom';
 import { appRoutes } from './routes';
 import PrivateRoute from './common/appRoutes/PrivateRoute';
 import PublicRoute from './common/appRoutes/PublicRoute';
+import { Context } from './common/context/Context';
 
 function App() {
+  const [user, setUser] = useState(localStorage.getItem('user') || '');
+  console.log('user', user);
+  console.log('localStorage.getItem()', localStorage.getItem('user'));
   const privateRoutes = [];
   const publicRoutes = [];
   for (const route of appRoutes) {
@@ -29,10 +33,11 @@ function App() {
   }
   return (
     <ChakraProvider theme={theme}>
-      <Box fontSize="xl">
-        <Grid minH="100vh" p={3} align="center" justify="center">
-          <ColorModeSwitcher justifySelf="flex-end" />
-          {/* <VStack spacing={8}>
+      <Context.Provider value={[user, setUser]}>
+        <Box fontSize="xl">
+          <Grid minH="100vh" p={3} align="center" justify="center">
+            <ColorModeSwitcher justifySelf="flex-end" />
+            {/* <VStack spacing={8}>
             <Logo h="40vmin" pointerEvents="none" />
             <Text>
               Edit <Code fontSize="xl">src/App.js</Code> and save to reload.
@@ -47,30 +52,31 @@ function App() {
               Learn Chakra
             </Link>
           </VStack> */}
-          <Router>
-            <Switch>
-              <>
-                {privateRoutes.map(route => (
-                  <PrivateRoute
-                    key={route.key}
-                    path={route.path}
-                    component={route.component}
-                    exact
-                  />
-                ))}
-                {publicRoutes.map(route => (
-                  <PublicRoute
-                    key={route.key}
-                    path={route.path}
-                    component={route.component}
-                    exact
-                  />
-                ))}
-              </>
-            </Switch>
-          </Router>
-        </Grid>
-      </Box>
+            <Router>
+              <Switch>
+                <>
+                  {privateRoutes.map(route => (
+                    <PrivateRoute
+                      key={route.key}
+                      path={route.path}
+                      component={route.component}
+                      exact
+                    />
+                  ))}
+                  {publicRoutes.map(route => (
+                    <PublicRoute
+                      key={route.key}
+                      path={route.path}
+                      component={route.component}
+                      exact
+                    />
+                  ))}
+                </>
+              </Switch>
+            </Router>
+          </Grid>
+        </Box>
+      </Context.Provider>
     </ChakraProvider>
   );
 }

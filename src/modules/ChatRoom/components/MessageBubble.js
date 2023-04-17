@@ -1,9 +1,12 @@
 import { StarIcon } from '@chakra-ui/icons';
 import { Avatar, Box, Flex, IconButton, Text } from '@chakra-ui/react';
 import React from 'react';
-
+import { format } from 'date-fns';
 const MessageBubble = props => {
-  const { isMine, message, timestamp, username, likes = 2 } = props;
+  const { currentUser, messageModel, onHandleLike } = props;
+  const { uuid, message, timestamp, username, likes } = messageModel;
+  const isMine = 'ses' === username;
+
   return (
     <Flex
       color={'black'}
@@ -16,7 +19,7 @@ const MessageBubble = props => {
       flexDirection={isMine ? 'row-reverse' : 'row'}
     >
       {!isMine && <Avatar size="sm" name="Sender Name" />}
-      <Flex flexDirection={'column'} maxW={'60%'}>
+      <Flex flexDirection={'column'} maxW={'60%'} minW={'80px'}>
         <Flex
           alignItems={isMine ? 'flex-end' : 'flex-start'}
           flexDirection={'column'}
@@ -32,13 +35,10 @@ const MessageBubble = props => {
           )}
 
           <Text fontSize="sm" color={'##2C2C2E'} textAlign={'start'}>
-            lorem ipsum lorem ipsum lorem ipsum ipsum ipsumipsumipsum
-            ipsumipsumipsum ipsumipsumipsum ipsumipsumipsum ipsumipsumipsum
-            ipsumipsumipsum ipsumipsumipsum ipsumipsumipsum ipsumipsumipsum
-            ipsumipsumipsum
+            {message}
           </Text>
           <Text fontSize="sm" alignSelf="flex-end" color={'#666668'}>
-            12:40pm
+            {format(Number(timestamp), 'HH:mm:ss')}
           </Text>
         </Flex>
         <Flex>
@@ -53,6 +53,7 @@ const MessageBubble = props => {
           variant="outline"
           colorScheme="telegram"
           alignSelf={'center'}
+          onClick={() => onHandleLike(uuid)}
           icon={<StarIcon />}
         />
       )}
