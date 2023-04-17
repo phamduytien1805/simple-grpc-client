@@ -10,6 +10,7 @@ import {
   Input,
   Stack,
   Text,
+  useToast,
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { ArrowForwardIcon } from '@chakra-ui/icons';
@@ -24,11 +25,13 @@ import { client } from '../../../grpcClient';
 const AccessForm = () => {
   const [userName, setUserName] = useState('');
   const [error, setError] = useState(null);
+
+  const toast = useToast();
   const [user, setUser] = useContext(Context);
   const history = useHistory();
 
   useEffect(() => {
-    console.log('firstss');
+    console.log('user', user);
     if (user) {
       history.push('/');
     }
@@ -57,6 +60,10 @@ const AccessForm = () => {
       console.log('response', subcode, message);
       if (err || (subcode && subcode !== CODE.SUCCESS)) {
         setError(message || 'error');
+        toast({
+          title: message || 'Something went wrong',
+          status: 'error',
+        });
         return;
       }
       setError(null);
@@ -80,13 +87,10 @@ const AccessForm = () => {
             <Input type="text" onChange={handleChange} value={userName} />
             <IconButton icon={<ArrowForwardIcon />} onClick={handleSubmit} />
           </Flex>
-          {error ? (
-            <FormErrorMessage>{error}</FormErrorMessage>
-          ) : (
-            <FormHelperText alignSelf={'flex-start'}>
-              Enter your username
-            </FormHelperText>
-          )}
+
+          <FormHelperText alignSelf={'flex-start'}>
+            Enter your username
+          </FormHelperText>
         </FormControl>
       </Flex>
     </Flex>

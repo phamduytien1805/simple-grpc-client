@@ -1,11 +1,12 @@
 import { StarIcon } from '@chakra-ui/icons';
-import { Avatar, Box, Flex, IconButton, Text } from '@chakra-ui/react';
+import { Avatar, Box, Divider, Flex, IconButton, Text } from '@chakra-ui/react';
 import React from 'react';
 import { format } from 'date-fns';
 const MessageBubble = props => {
   const { currentUser, messageModel, onHandleLike } = props;
-  const { uuid, msg, timestamp, username, like } = messageModel;
-  const isMine = 'ses' === username;
+  console.log('messageModel', messageModel);
+  const { uuid, msg, timestamp, username, like, eventType } = messageModel;
+  const isMine = currentUser === username;
 
   return (
     <Flex
@@ -18,7 +19,7 @@ const MessageBubble = props => {
       alignSelf={isMine ? 'flex-end' : 'flex-start'}
       flexDirection={isMine ? 'row-reverse' : 'row'}
     >
-      {!isMine && <Avatar size="sm" name="Sender Name" />}
+      {!isMine && <Avatar size="sm" name={username} />}
       <Flex flexDirection={'column'} maxW={'60%'} minW={'80px'}>
         <Flex
           alignItems={isMine ? 'flex-end' : 'flex-start'}
@@ -30,14 +31,27 @@ const MessageBubble = props => {
         >
           {!isMine && (
             <Text fontSize="sm" fontWeight="bold">
-              Sender Name
+              {username}
             </Text>
           )}
 
-          <Text fontSize="sm" color={'##2C2C2E'} textAlign={'start'}>
-            {msg}
+          <Text
+            fontSize="sm"
+            color={'##2C2C2E'}
+            textAlign={'start'}
+            noOfLines={1}
+            maxW={'100%'} // add this line
+            overflow={'none'}
+            display={''}
+          >
+            {msg.replace(/\\n/g, '\n')}
           </Text>
-          <Text fontSize="sm" alignSelf="flex-end" color={'#666668'}>
+          <Text
+            fontSize="sm"
+            alignSelf="flex-end"
+            color={'#666668'}
+            wordBreak={'break-all'}
+          >
             {format(Number(timestamp), 'HH:mm:ss')}
           </Text>
         </Flex>

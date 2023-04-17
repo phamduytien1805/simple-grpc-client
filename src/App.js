@@ -31,7 +31,12 @@ function App() {
     }
   }
   return (
-    <ChakraProvider theme={theme}>
+    <ChakraProvider
+      theme={theme}
+      toastOptions={{
+        defaultOptions: { position: 'bottom', isClosable: true },
+      }}
+    >
       <Context.Provider value={[user, setUser]}>
         <Box fontSize="xl">
           <Grid minH="100vh" p={3} align="center" justify="center">

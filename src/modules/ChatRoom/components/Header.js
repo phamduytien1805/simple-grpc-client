@@ -4,7 +4,8 @@ import { ArrowForwardIcon } from '@chakra-ui/icons';
 import AvatarGroup from './AvatarGroup';
 import { Context } from '../../../common/context/Context';
 
-export const Header = () => {
+export const Header = props => {
+  const { endStream } = props;
   const [user, setUser] = useContext(Context);
   const handleOutRoom = () => {
     localStorage.removeItem('user');
