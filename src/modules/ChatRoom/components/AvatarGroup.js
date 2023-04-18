@@ -1,35 +1,35 @@
-import { Box } from '@chakra-ui/react';
+import { Avatar, Box, Flex } from '@chakra-ui/react';
 import React from 'react';
 
-const AvatarGroup = () => {
+const AvatarGroup = ({ userList }) => {
+  console.log('userList', userList);
   return (
-    <Box display="flex">
-      <Box
-        border="1px solid white"
-        w={'24px'}
-        h="24px"
-        borderRadius="50%"
-        bg={'red'}
-      />{' '}
-      <Box position="relative" left="-10%">
-        <Box
-          w={'24px'}
-          border="1px solid white"
-          h="24px"
-          borderRadius="50%"
-          bg={'black'}
-        />{' '}
-      </Box>
-      <Box position="relative" left="-20%">
-        <Box
-          border="1px solid white"
-          w={'24px'}
-          h="24px"
-          borderRadius="50%"
-          bg={'grey'}
-        />{' '}
-      </Box>
-    </Box>
+    <Flex>
+      {(userList || []).map((_user, index) => {
+        const props =
+          index !== 0
+            ? {
+                pos: 'relative',
+                border: '1px solid white',
+                left: `${index * -10}px`,
+              }
+            : { border: '1px solid white' };
+        if (index === 3) {
+          return (
+            <Avatar
+              size="xs"
+              name={`+${
+                userList.length ? userList.length - index + 1 : 'More'
+              }`}
+              {...props}
+            />
+          );
+        } else if (index > 3) {
+          return null;
+        }
+        return <Avatar size="xs" name={_user} {...props} />;
+      })}
+    </Flex>
   );
 };
 

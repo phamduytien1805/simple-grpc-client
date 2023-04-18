@@ -23,6 +23,7 @@ const JoinNoti = ({ username, timestamp }) => {
 
 const MessagesList = props => {
   const { messagesList, currentUser, onHandleLike } = props;
+  console.log('messagesList', messagesList);
   return (messagesList || []).map((messageModel, index) => {
     switch (messageModel.eventType) {
       case 1:

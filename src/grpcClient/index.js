@@ -48,6 +48,22 @@ export default function useChatStreamManager(grpcClient) {
             timestamp: joinNoti.getTimestamp(),
           },
         });
+      } else if (eventType === 3) {
+        const likedMsg = response.getLikemessage();
+        const messageModel = likedMsg.getMessage();
+        // const messageModel = msgData.getChatmessage();
+        const message = {
+          uuid: messageModel.getUuid(),
+          username: messageModel.getUsername(),
+          msg: messageModel.getMsg(),
+          timestamp: messageModel.getTimestamp(),
+          like: messageModel.getLike(),
+        };
+        console.log('message', message);
+        setEvent({
+          eventType,
+          data: message,
+        });
       }
     });
     chatStream.on('status', function (status) {

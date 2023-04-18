@@ -12,7 +12,13 @@ import ChatBox from '../components/ChatBox';
 import MessagesList from '../components/MessagesList';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import { Empty, MessagePayload } from '../../../chat_pb';
+import {
+  LikeMessage,
+  Empty,
+  MessagePayload,
+  ChatMessage,
+  User,
+} from '../../../chat_pb';
 import useChatStreamManager, {
   ChatStreamManager,
   client,
@@ -25,28 +31,68 @@ export const ChatRoom = () => {
   const [inputMessage, setInputMessage] = useState('');
   const [messagesList, setMessagesList] = useState([]);
   const [user, setUser] = useContext(Context);
+  const [userList, setUserList] = useState([]);
   const [error, setError] = useState(null);
   const toast = useToast();
 
   const [event] = useChatStreamManager(client);
 
   useEffect(() => {
+    const empty = new Empty();
+    client.getAllUsers(empty, null, (err, res) => {
+      if (!err) {
+        const usersList = res.getUsersList();
+        setUserList(usersList.map(_user => _user.getName()));
+      }
+    });
+    if (user) {
+      const currentUser = new User();
+      currentUser.setName(user);
+      client.getAllMessages(currentUser, null, (err, res) => {
+        if (!err) {
+          const msgList = res.getMsgList();
+          const msgRawList = msgList.map(_msg => {
+            return {
+              eventType: 1,
+              uuid: _msg.getUuid(),
+              username: _msg.getUsername(),
+              msg: _msg.getMsg(),
+              timestamp: _msg.getTimestamp(),
+              like: _msg.getLike(),
+            };
+          });
+          setMessagesList(msgRawList);
+        }
+      });
+    }
+  }, []);
+
+  useEffect(() => {
     if (!isEmpty(event)) {
       const { eventType, data: msg } = event;
       if (eventType === 3) {
+        const updatedMsgList = messagesList.map(_msg => {
+          if (_msg.uuid === msg.uuid) {
+            return { ..._msg, ...msg };
+          }
+          return _msg;
+        });
+
+        setMessagesList(updatedMsgList);
         return;
       }
       if (event && msg) {
-        console.log('event', event);
+        if (eventType === 2) {
+          const empty = new Empty();
+          client.getAllUsers(empty, null, (err, res) => {
+            if (!err) {
+              const usersList = res.getUsersList();
+              setUserList(usersList.map(_user => _user.getName()));
+            }
+          });
+        }
         setMessagesList(prev => [...prev, { ...msg, eventType }]);
       }
-
-      // if (eventType === 1) {
-      //   setMessagesList(prev => [...prev, {...msg,eventType }]);
-      // }
-      // else if (eventType === 2) {
-      //   setMessagesList(prev => [...prev, msg]);
-      // }
     }
   }, [event]);
 
@@ -67,7 +113,7 @@ export const ChatRoom = () => {
         setError(message);
         toast({
           status: 'error',
-          title: message,
+          title: message || 'error',
         });
         return;
       }
@@ -75,8 +121,34 @@ export const ChatRoom = () => {
       setInputMessage('');
     });
   };
-  const onHandleLike = uuid => {
-    console.log('uuid', uuid);
+  const onHandleLike = ({ uuid, msg, timestamp, username, like }) => {
+    if (!user) return;
+    const targetMsg = new ChatMessage();
+    targetMsg.setUuid(uuid);
+    targetMsg.setMsg(msg);
+    targetMsg.setTimestamp(timestamp);
+    targetMsg.setUsername(username);
+    targetMsg.setLike(like);
+
+    const likedMsg = new LikeMessage();
+    likedMsg.setMessage(targetMsg);
+    likedMsg.setUsersend(user);
+
+    client.likeMessage(likedMsg, null, (err, res) => {
+      const message = res.getMessage();
+      const subcode = res.getSubcode();
+      if (subcode && subcode !== CODE.SUCCESS) {
+        setError(message);
+        toast({
+          status: 'error',
+          title: message || 'error',
+        });
+        return;
+      }
+      setError(null);
+    });
+
+    // console.log('uuid', uuid);
   };
   return (
     <Flex justifyContent="center" alignItems="center" h={'90vh'}>
@@ -89,7 +161,7 @@ export const ChatRoom = () => {
         borderRadius={8}
         position={'relative'}
       >
-        <Header />
+        <Header userList={userList} />
         <PerfectScrollbar
           style={{
             height: 'calc(100% - 174px)',

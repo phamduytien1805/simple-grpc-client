@@ -32,7 +32,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start:multiport": "concurrently \"npm start\" \"PORT=3005 npm start\" \"PORT=3006 npm start\""
+    "start:multiport": "concurrently \"npm start\" \"PORT=3005 npm start\" \"PORT=3006 npm start\" \"PORT=3007 npm start\" \"PORT=3008 npm start\""
   },
   "eslintConfig": {
     "extends": "react-app"

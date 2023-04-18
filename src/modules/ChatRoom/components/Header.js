@@ -5,7 +5,7 @@ import AvatarGroup from './AvatarGroup';
 import { Context } from '../../../common/context/Context';
 
 export const Header = props => {
-  const { endStream } = props;
+  const { userList } = props;
   const [user, setUser] = useContext(Context);
   const handleOutRoom = () => {
     localStorage.removeItem('user');
@@ -20,7 +20,7 @@ export const Header = props => {
       boxShadow={'inset 0px -1px 0px #E5E5EA'}
       p={13}
     >
-      <AvatarGroup />
+      <AvatarGroup userList={userList} />
       <Box>Distributed System</Box>
       <Box>
         <IconButton icon={<ArrowForwardIcon />} onClick={handleOutRoom} />

@@ -4,9 +4,9 @@ import React from 'react';
 import { format } from 'date-fns';
 const MessageBubble = props => {
   const { currentUser, messageModel, onHandleLike } = props;
-  console.log('messageModel', messageModel);
   const { uuid, msg, timestamp, username, like, eventType } = messageModel;
   const isMine = currentUser === username;
+  // console.log('messageModel', messageModel);
 
   return (
     <Flex
@@ -20,7 +20,12 @@ const MessageBubble = props => {
       flexDirection={isMine ? 'row-reverse' : 'row'}
     >
       {!isMine && <Avatar size="sm" name={username} />}
-      <Flex flexDirection={'column'} maxW={'60%'} minW={'80px'}>
+      <Flex
+        flexDirection={'column'}
+        maxW={'60%'}
+        minW={'80px'}
+        pos={'relative'}
+      >
         <Flex
           alignItems={isMine ? 'flex-end' : 'flex-start'}
           flexDirection={'column'}
@@ -55,19 +60,32 @@ const MessageBubble = props => {
             {format(Number(timestamp), 'HH:mm:ss')}
           </Text>
         </Flex>
-        <Flex>
-          {Array.from({ length: like }).map(() => (
-            <StarIcon fillOpacity={'20%'} boxSize={3} color={'yellow.700'} />
-          ))}
+        <Flex pos={'absolute'} bottom={'-10px'}>
+          {like > 3 ? (
+            <Flex gap={1} justifyContent={'center'} alignItems={'center'}>
+              {Array.from({ length: 3 }).map(() => (
+                <StarIcon
+                  fillOpacity={'20%'}
+                  boxSize={3}
+                  color={'yellow.700'}
+                />
+              ))}
+              <Text fontSize={'12px'} color={'gray.500'}>{`+${like - 3}`}</Text>
+            </Flex>
+          ) : (
+            Array.from({ length: like }).map(() => (
+              <StarIcon fillOpacity={'20%'} boxSize={3} color={'yellow.700'} />
+            ))
+          )}
         </Flex>
       </Flex>
 
       {!isMine && (
         <IconButton
+          mt={'15px'}
           variant="outline"
           colorScheme="telegram"
-          alignSelf={'center'}
-          onClick={() => onHandleLike(uuid)}
+          onClick={() => onHandleLike({ uuid, msg, timestamp, username, like })}
           icon={<StarIcon />}
         />
       )}
