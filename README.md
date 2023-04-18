@@ -9,22 +9,18 @@ The goal of this project is to understand how GRPC protocol works.
 $ docker build -t grpc-web-react .
 # Run docker
 $ docker run -d --name grpc-web-react -p 8080:8080 -p 9901:9901 grpc-web-react
-
-## Running multiple port (currently 5 port)
-$ npm run start:multiport
-or
-$ yarn run start:multiport
-
+```
 
 ## Running the app
 
-```bash
+```Running single port (default 3000)
 # development
 $ npm run start
 or
 $ yarn run start
 
-## Running multiple port (currently 5 port)
+## Running multiple port (currently 5 port ( 3000, 3005, 3006, 3007, 3008 ))
 $ npm run start:multiport
 or
 $ yarn run start:multiport
+```
