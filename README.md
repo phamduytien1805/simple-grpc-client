@@ -5,6 +5,10 @@ The goal of this project is to understand how GRPC protocol works.
 
 ## Prerequisite
 ```bash
+#Install package
+$ npm install
+or
+$ yarn install
 # Build dockor envoy
 $ docker build -t grpc-web-react .
 # Run docker
